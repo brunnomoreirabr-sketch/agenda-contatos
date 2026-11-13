@@ -1,0 +1,14 @@
+AGENDA DE CONTATOS
+
+1. Extraia o ZIP inteiro para uma pasta.
+2. Abra Instalar no Windows.bat.
+3. Use o atalho Agenda de Contatos na area de trabalho.
+
+O pacote Windows inclui o programa. Nao precisa instalar Python.
+O instalador copia o programa para %LOCALAPPDATA%\Programs\AgendaContatos.
+Os contatos ficam em %LOCALAPPDATA%\AgendaContatos e sao mantidos em atualizacoes.
+Use Exportar CSV para fazer uma copia de seguranca.
+O executavel nao tem assinatura digital; o Windows pode pedir confirmacao ao abrir.
+
+Para desinstalar, apague o atalho e a pasta Programs\AgendaContatos acima.
+A pasta dos contatos e separada e permanece no computador.

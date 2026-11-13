@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.venv/
+build/
+dist/
+*.spec
+*.sqlite3*
+contatos.csv
+database.csv
+.DS_Store

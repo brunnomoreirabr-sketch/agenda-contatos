@@ -1,0 +1,46 @@
+name: Pacote Windows
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  pacote:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests -v
+      - run: python -m pip install pyinstaller==6.16.0
+      - run: python -m PyInstaller --noconfirm --onefile --windowed --name AgendaContatos agenda.py
+      - name: Conferir inicialização
+        shell: pwsh
+        run: |
+          $env:LOCALAPPDATA = Join-Path $env:RUNNER_TEMP 'agenda-smoke'
+          $app = Start-Process dist/AgendaContatos.exe -PassThru
+          Start-Sleep -Seconds 8
+          $app.Refresh()
+          if ($app.HasExited) { throw 'A agenda fechou durante a inicializacao.' }
+          $db = Join-Path $env:LOCALAPPDATA 'AgendaContatos/contatos.sqlite3'
+          if (!(Test-Path $db)) { Stop-Process $app.Id; throw 'O banco local nao foi criado.' }
+          Stop-Process $app.Id
+      - name: Preparar ZIP
+        shell: pwsh
+        run: |
+          Copy-Item instalar_windows.ps1 dist/
+          Copy-Item 'Instalar no Windows.bat' dist/
+          Copy-Item LEIA-ME-WINDOWS.txt dist/
+          Compress-Archive -Path dist/* -DestinationPath AgendaContatos-Windows.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AgendaContatos-Windows
+          path: AgendaContatos-Windows.zip
+      - name: Publicar pacote
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" AgendaContatos-Windows.zip --title "Agenda de Contatos $GITHUB_REF_NAME" --notes-file LEIA-ME-WINDOWS.txt
