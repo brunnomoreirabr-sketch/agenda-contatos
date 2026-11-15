@@ -67,6 +67,16 @@ A importação acrescenta contatos e preserva os existentes. Se uma linha tiver 
 
 Para remover o programa, apague o atalho e a pasta da aplicação. Os contatos ficam na pasta de dados acima e só são removidos se você apagar essa pasta também.
 
+## Decisões do projeto
+
+- **Tkinter:** permite criar a interface com a biblioteca padrão do Python.
+- **SQLite:** mantém os dados separados da instalação, identifica cada contato por um ID e permite contatos com nomes iguais.
+- **CSV para intercâmbio:** a importação valida todas as linhas antes de gravar, e a exportação permite levar os contatos para outros programas.
+
+Os testes cobrem persistência após reabrir o banco, busca sem acentos, edição e exclusão, contatos com o mesmo nome, importação/exportação, duplicatas e recusa de arquivos inválidos. A automação Windows também instala o programa e confere se o atalho abre o executável e cria o banco local.
+
+A versão atual foi feita para uso individual no computador e não oferece sincronização entre dispositivos.
+
 ## Organização
 
 ```text
